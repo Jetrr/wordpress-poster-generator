@@ -155,9 +155,14 @@ class RightImageBackgroundPosterTemplate(PosterTemplate):
         output_size = (1425, 753)
         bg_folder = os.path.join(self.base, 'static', 'background', self.company_name)
         bg_img_path = os.path.join(bg_folder, f'{self.company_name}-background.png')
-        if not os.path.exists(bg_img_path):
-            raise FileNotFoundError(f"Background image for {self.company_name} not found!")
-        bg = Image.open(bg_img_path).convert("RGBA").resize(output_size, Image.LANCZOS)
+
+        # --- changed: fallback to white bg if file doesn't exist ---
+        if os.path.exists(bg_img_path):
+            bg = Image.open(bg_img_path).convert("RGBA").resize(output_size, Image.LANCZOS)
+        else:
+            bg = Image.new("RGBA", output_size, (255, 255, 255, 255))
+        # ----------------------------------------------------------
+
         # Character image on right side
         characters_dir = os.path.join(self.base, 'static', 'characters', self.company_name)
         character_imgs = [
@@ -206,7 +211,7 @@ class RightImageBackgroundPosterTemplate(PosterTemplate):
         text_y = 400
         max_text_width = right_x - text_x - 40
 
-        # Draw main heading (multiline, colored)
+        # Draw main heading
         y_cursor = text_y
         for line in main_heading_lines:
             line_x = text_x
@@ -221,7 +226,7 @@ class RightImageBackgroundPosterTemplate(PosterTemplate):
                 line_height = max(line_height, word_height)
             y_cursor += line_height + 10
 
-        # Draw subheading
+        # Subheading
         subheading_lines = wrap_text(self.subheading, subheading_font, max_text_width)
         subheading_line_height = subheading_font.getbbox("Ay")[3] - subheading_font.getbbox("Ay")[1]
         subheading_top = y_cursor + 44
@@ -233,7 +238,6 @@ class RightImageBackgroundPosterTemplate(PosterTemplate):
                 fill=hex_to_rgba(self.font_color)
             )
         return bg
-
 ### === Factory ===
 class PosterTemplateFactory:
     templates = {
