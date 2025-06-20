@@ -123,7 +123,7 @@ class ClassicPosterTemplate(PosterTemplate):
         bg.paste(icon, (icon_x, icon_y), icon)
 
         draw = ImageDraw.Draw(bg)
-        text_x, text_y = 40, 250
+        text_x, text_y = 40, 150
         max_text_width = right_x - text_x
 
         # Draw main heading (multiline, colored)
@@ -208,7 +208,7 @@ class RightImageBackgroundPosterTemplate(PosterTemplate):
 
         draw = ImageDraw.Draw(bg)
         text_x = 40
-        text_y = 250
+        text_y = 150
         max_text_width = right_x - text_x - 40
 
         # Draw main heading
