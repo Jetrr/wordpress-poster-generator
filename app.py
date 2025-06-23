@@ -123,7 +123,7 @@ class ClassicPosterTemplate(PosterTemplate):
         bg.paste(icon, (icon_x, icon_y), icon)
 
         draw = ImageDraw.Draw(bg)
-        text_x, text_y = 40, 250
+        text_x, text_y = 40, 200
         max_text_width = right_x - text_x
 
         fixed_line_height = main_font_bold.getbbox("Ay")[3] - main_font_bold.getbbox("Ay")[1]
@@ -207,7 +207,7 @@ class RightImageBackgroundPosterTemplate(PosterTemplate):
 
         draw = ImageDraw.Draw(bg)
         text_x = 40
-        text_y = 250
+        text_y = 200
         max_text_width = right_x - text_x - 40
 
         fixed_line_height = main_font_bold.getbbox("Ay")[3] - main_font_bold.getbbox("Ay")[1]
