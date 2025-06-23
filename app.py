@@ -123,23 +123,22 @@ class ClassicPosterTemplate(PosterTemplate):
         bg.paste(icon, (icon_x, icon_y), icon)
 
         draw = ImageDraw.Draw(bg)
-        text_x, text_y = 40, 300
+        text_x, text_y = 40, 250
         max_text_width = right_x - text_x
 
-        # Draw main heading (multiline, colored)
+        fixed_line_height = main_font_bold.getbbox("Ay")[3] - main_font_bold.getbbox("Ay")[1]
+        line_spacing = 10
+
         y_cursor = text_y
         for line in main_heading_lines:
             line_x = text_x
-            line_height = 0
             for word, color in line:
                 font = main_font_bold
                 bbox = font.getbbox(word)
                 word_width = bbox[2] - bbox[0]
-                word_height = bbox[3] - bbox[1]
                 draw.text((line_x, y_cursor), word, font=font, fill=hex_to_rgba(color))
                 line_x += word_width + 12
-                line_height = max(line_height, word_height)
-            y_cursor += line_height + 10
+            y_cursor += fixed_line_height + line_spacing
 
         # Subheading logic
         subheading_lines = wrap_text(self.subheading, subheading_font, max_text_width)
@@ -208,23 +207,22 @@ class RightImageBackgroundPosterTemplate(PosterTemplate):
 
         draw = ImageDraw.Draw(bg)
         text_x = 40
-        text_y = 300
+        text_y = 250
         max_text_width = right_x - text_x - 40
 
-        # Draw main heading
+        fixed_line_height = main_font_bold.getbbox("Ay")[3] - main_font_bold.getbbox("Ay")[1]
+        line_spacing = 10
+
         y_cursor = text_y
         for line in main_heading_lines:
             line_x = text_x
-            line_height = 0
             for word, color in line:
                 font = main_font_bold
                 bbox = font.getbbox(word)
                 word_width = bbox[2] - bbox[0]
-                word_height = bbox[3] - bbox[1]
                 draw.text((line_x, y_cursor), word, font=font, fill=hex_to_rgba(color))
                 line_x += word_width + 12
-                line_height = max(line_height, word_height)
-            y_cursor += line_height + 10
+            y_cursor += fixed_line_height + line_spacing
 
         # Subheading
         subheading_lines = wrap_text(self.subheading, subheading_font, max_text_width)
