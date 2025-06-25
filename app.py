@@ -118,7 +118,7 @@ class ClassicPosterTemplate(PosterTemplate):
         new_icon_h = int(icon_h * scale)
         icon = icon.resize((new_icon_w, new_icon_h), Image.LANCZOS)
         icon_x = LEFT_MARGIN
-        icon_y = LEFT_MARGIN
+        icon_y = 40
         bg.paste(icon, (icon_x, icon_y), icon)
 
         draw = ImageDraw.Draw(bg)
@@ -205,7 +205,7 @@ class RightImageBackgroundPosterTemplate(PosterTemplate):
         icon_new_h = int(icon_h * icon_scale)
         logo = logo.resize((icon_new_w, icon_new_h), Image.LANCZOS)
         icon_x = LEFT_MARGIN
-        icon_y = LEFT_MARGIN
+        icon_y = 40
         bg.paste(logo, (icon_x, icon_y), logo)
 
         # Prepare fonts and text lines
