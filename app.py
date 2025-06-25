@@ -175,6 +175,7 @@ class RightImageBackgroundPosterTemplate(PosterTemplate):
         else:
             bg = Image.new("RGBA", output_size, (255, 255, 255, 255))
 
+        # Character image on right side
         characters_dir = os.path.join(self.base, 'static', 'characters', self.company_name)
         character_imgs = [
             os.path.join(characters_dir, img)
@@ -192,7 +193,8 @@ class RightImageBackgroundPosterTemplate(PosterTemplate):
         right_x = output_size[0] - new_char_width - 40
         top_y = int((output_size[1] - char_max_height) // 2)
         bg.paste(char_img, (right_x, top_y), char_img)
-        # Logo at top left (=== CHANGED PADDING HERE ===)
+
+        # Logo at top left
         LEFT_MARGIN = 80
         max_icon_width = 164
         max_icon_height = 164
@@ -206,6 +208,7 @@ class RightImageBackgroundPosterTemplate(PosterTemplate):
         icon_y = LEFT_MARGIN
         bg.paste(logo, (icon_x, icon_y), logo)
 
+        # Prepare fonts and text lines
         main_heading_lines = parse_heading_to_lines(self.main_heading, self.font_color)
         main_font_path = os.path.join(self.base, 'static', 'GolosText-Regular.ttf')
         main_font_bold_path = os.path.join(self.base, 'static', 'GolosText-Bold.ttf')
@@ -218,13 +221,27 @@ class RightImageBackgroundPosterTemplate(PosterTemplate):
 
         draw = ImageDraw.Draw(bg)
         text_x = LEFT_MARGIN
-        text_y = 200
-        max_text_width = right_x - text_x - 40
+        max_text_width = right_x - text_x
 
+        # --- Dynamic vertical centering, matching ClassicPosterTemplate ---
         fixed_line_height = main_font_bold.getbbox("Ay")[3] - main_font_bold.getbbox("Ay")[1]
         line_spacing = 10
+        main_heading_lines_count = len(main_heading_lines)
+        main_block_height = main_heading_lines_count * fixed_line_height + (main_heading_lines_count - 1) * line_spacing
 
-        y_cursor = text_y
+        subheading_lines = wrap_text(self.subheading, subheading_font, max_text_width)
+        subheading_line_height = subheading_font.getbbox("Ay")[3] - subheading_font.getbbox("Ay")[1]
+        sub_block_height = len(subheading_lines) * subheading_line_height
+
+        gap_between_heading_and_sub = 44  # fixed gap
+        total_text_block_height = main_block_height + gap_between_heading_and_sub + sub_block_height
+
+        image_height = output_size[1]
+        vertical_margin = 40
+        usable_height = image_height - 2 * vertical_margin
+        start_y = vertical_margin + max(0, (usable_height - total_text_block_height) // 2)
+
+        y_cursor = start_y
         for line in main_heading_lines:
             line_x = text_x
             for word, color in line:
@@ -235,15 +252,13 @@ class RightImageBackgroundPosterTemplate(PosterTemplate):
                 line_x += word_width + 12
             y_cursor += fixed_line_height + line_spacing
 
-        subheading_lines = wrap_text(self.subheading, subheading_font, max_text_width)
-        subheading_line_height = subheading_font.getbbox("Ay")[3] - subheading_font.getbbox("Ay")[1]
-        subheading_top = y_cursor + 44
+        subheading_top = y_cursor + gap_between_heading_and_sub - line_spacing
         for i, line in enumerate(subheading_lines):
             draw.text(
                 (text_x, subheading_top + i * subheading_line_height),
                 line,
                 font=subheading_font,
-                fill=hex_to_rgba(self.font_color)
+                fill=hex_to_rgba(self.font_color),
             )
         return bg
 
