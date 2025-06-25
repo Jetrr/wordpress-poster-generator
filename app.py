@@ -138,7 +138,7 @@ class ClassicPosterTemplate(PosterTemplate):
         total_text_block_height = main_block_height + gap_between_heading_and_sub + sub_block_height
 
         image_height = output_size[1]
-        vertical_margin = 40
+        vertical_margin = 160
         usable_height = image_height - 2 * vertical_margin
         start_y = vertical_margin + (usable_height - total_text_block_height) // 2
 
@@ -237,7 +237,7 @@ class RightImageBackgroundPosterTemplate(PosterTemplate):
         total_text_block_height = main_block_height + gap_between_heading_and_sub + sub_block_height
 
         image_height = output_size[1]
-        vertical_margin = 40
+        vertical_margin = 160
         usable_height = image_height - 2 * vertical_margin
         start_y = vertical_margin + max(0, (usable_height - total_text_block_height) // 2)
 
